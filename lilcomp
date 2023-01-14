@@ -1,0 +1,48 @@
+from bs4 import BeautifulSoup
+import requests
+import smtplib, ssl
+
+scrapepage = requests.get("https://www.weatherzone.com.au")
+
+soup = BeautifulSoup(scrapepage.text, "html.parser")
+
+weather = soup.findAll("p", attrs={"class":"sc-dd485008-10 fMxzMU"})
+cities = soup.findAll("span", attrs={"class":"sc-dd485008-7 garvEL"})
+
+degrees_list = []
+city_names = []
+senderemail = "ishaanpythontest@gmail.com"
+recieveremail = "ishaansendhil@gmail.com"
+
+#find and print weather thing
+for temp in weather:
+    degrees_list.append(temp.text)
+
+for city in cities:
+    city_names.append(city.text)
+
+i = len(city_names) #8
+
+message = ""
+
+for x in range (i + 1):
+    if x < 8:
+        message += "the weather in " + city_names[x] + " is " + degrees_list[x] + " "
+    else:
+        break
+
+    #print("the weather in " + city_names[x] + " is " + degrees_list[x])
+
+print(message)
+
+#email send setup  
+#port = 465  # For SSL
+#password = input("123")
+
+#context = ssl.create_default_context()
+
+#with smtplib.SMTP_SSL("smtp.gmail.com", port, context=context) as server:
+    #server.login("my@gmail.com", password)
+
+#server.sendmail(senderemail, recieveremail, message)
+
